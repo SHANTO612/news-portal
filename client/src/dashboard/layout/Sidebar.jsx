@@ -17,7 +17,7 @@ const Sidebar = () => {
      const logout = () => {
         localStorage.removeItem('newsToken')
         dispatch({ type: 'logout', payload: ''})
-        navigate('/login')
+        window.location.href = '/login'; // Force full reload to reset store
      }
 
     return (

@@ -103,7 +103,7 @@ const Writerindex = () => {
                                     </td>
                                     <td className='py-4 px-6'>
                                         <div className='flex gap-3 text-gray-500'>
-                                            <Link to={`/news/${n._id}`} className='p-2 bg-blue-500 text-white rounded hover:bg-blue-800'>
+                                            <Link to={`/dashboard/news/detail/${n._id}`} className='p-2 bg-blue-500 text-white rounded hover:bg-blue-800'>
                                                 <FaEye />
                                             </Link>
                                         </div>

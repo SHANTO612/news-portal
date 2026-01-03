@@ -9,8 +9,15 @@ dotenv.config()
 
 app.use(body_parser.json())
 
-if (process.env.mode === 'production') {
-    app.use(cors())
+if (process.env.mode === 'production' || process.env.NODE_ENV === 'production') {
+    app.use(cors({
+        origin: [
+            "http://localhost:5173", 
+            "http://localhost:3000",
+            process.env.CLIENT_URL,
+            process.env.FRONTEND_URL
+        ].filter(Boolean) // Filter out undefined/null values
+    }))
 } else {
     app.use(cors({
         origin: ["http://localhost:5173" , "http://localhost:3000"]
@@ -20,7 +27,7 @@ if (process.env.mode === 'production') {
 
 
 
-const port = process.env.port 
+const port = process.env.PORT || 5000
 
 app.use('/',require('./routes/authRoutes'))
 app.use('/',require('./routes/newsRoutes'))

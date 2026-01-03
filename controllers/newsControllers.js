@@ -104,11 +104,22 @@ class newsControllers {
  //End Method 
 
  get_edit_dashboard_news = async(req, res) => {
-    const {news_id} = req.params 
+    const {news_id, newsId} = req.params 
+    const id = news_id || newsId;
+    
     try {
-        const news = await newsModel.findById(news_id)
+        if (!id) {
+            return res.status(400).json({message: 'News ID is required'});
+        }
+        
+        const news = await newsModel.findById(id);
+        if (!news) {
+            return res.status(404).json({message: 'News not found'});
+        }
+        
         return res.status(200).json({news})
     } catch (error) {
+        console.error('Error fetching news:', error);
         return res.status(500).json({message: 'Internal server Error'})
     }
  }

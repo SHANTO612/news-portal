@@ -39,8 +39,7 @@ const Login = () => {
       dispatch({
         type: "login_success",
         payload: {
-          token: data.token,
-          userInfo: data.user // <-- ensure your API returns user info including role!
+          token: data.token
         }
       });
 
@@ -62,6 +61,8 @@ const Login = () => {
       }));
     }
   };
+
+  
 
   return (
     <div className='min-h-screen bg-slate-100 flex items-center justify-center'>
@@ -110,6 +111,8 @@ const Login = () => {
               </button>
             </div>
           </form>
+
+          
 
         </div>
       </div>

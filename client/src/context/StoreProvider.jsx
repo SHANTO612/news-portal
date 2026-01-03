@@ -3,11 +3,16 @@ import storeReducer from './storeReducer';
 import storeContext from './storeContext';
 import decode_token from '../utils';
 
-const StorePovider = ({ children }) => {
+const StoreProvider = ({ children }) => {
+
+    const tokenFromStorage = localStorage.getItem('newsToken');
+    const decoded = decode_token(tokenFromStorage);
+    console.log('StoreProvider token:', tokenFromStorage);
+    console.log('StoreProvider decoded:', decoded);
 
     const [store, dispatch] = useReducer(storeReducer,{
-        userInfo: decode_token(localStorage.getItem('newsToken')),
-        token: localStorage.getItem('newsToken') || ""
+        userInfo: decoded,
+        token: tokenFromStorage || ""
     })
 
     return <storeContext.Provider value={{store, dispatch}}> 
@@ -16,4 +21,4 @@ const StorePovider = ({ children }) => {
      
 };
 
-export default StorePovider;
+export default StoreProvider;

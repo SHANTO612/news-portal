@@ -15,53 +15,50 @@ import CreateNews from './dashboard/pages/CreateNews';
 import storeContext from './context/storeContext';
 import EditWriter from './dashboard/pages/EditWriter';
 import EditNews from './dashboard/pages/EditNews';
+import DashboardLanding from './dashboard/pages/DashboardLanding';
+import NewsDetail from './dashboard/pages/NewsDetail';
  
 
 function App() { 
 
    const {store} = useContext(storeContext)
 
+   // Debug: Log userInfo, token, and localStorage token after login
+   console.log('UserInfo:', store?.userInfo);
+   console.log('Token:', store?.token);
+   console.log('LocalStorage Token:', localStorage.getItem('newsToken'));
+
+   // Wait for userInfo to be loaded (not null/undefined) only if token exists
+   if (store.token && (store.userInfo === undefined || store.userInfo === null || store.userInfo === "")) {
+     return <div>Loading...</div>;
+   }
+
   return (
      <BrowserRouter>
      <Routes>
       <Route path='/login' element={<Login/>} />
-      
-        <Route path='/dashboard' element={<ProtectDashboard/>}>
+      <Route path='/dashboard' element={<ProtectDashboard/>}>
+        <Route path='' element={<DashboardLanding/>} />
+        <Route path='unable-access' element={<Unable/>} />
+        <Route path='profile' element={<Profile/>} />
+        <Route path='news' element={<News/>} />
         <Route path='' element={<MainLayout/>} >
-         <Route
-  path=''
-  element={
-    store?.userInfo?.role === 'admin' ? (
-      <Navigate to='/dashboard/admin' />
-    ) : store?.userInfo?.role === 'writer' ? (
-      <Navigate to='/dashboard/writer' />
-    ) : (
-      <Navigate to='/dashboard/unable-access' />
-    )
-  }
-/>
-
-          <Route path='unable-access' element={<Unable/>} />
-
-          <Route path='profile' element={<Profile/>} />
-          <Route path='news' element={<News/>} />
-
+          <Route path='' element={<Navigate to='/dashboard' />} />
+          <Route path='news/detail/:newsId' element={<NewsDetail/>} />
           <Route path='' element={<ProtectRole role='admin' />}>
             <Route path='admin' element={<Adminindex/>} />
             <Route path='writer/add' element={<AddWriter/>} />
             <Route path='writers' element={<Writers/>} />
             <Route path='writer/edit/:id' element={<EditWriter/>} />
-          </Route> 
-
+          </Route>
           <Route path='' element={<ProtectRole role='writer' />}>
             <Route path='writer' element={<Writerindex/>} />
-            <Route path='news/create' element={<CreateNews/>} /> 
+            <Route path='news/create' element={<CreateNews/>} />
             <Route path='news/edit/:news_id' element={<EditNews/>} />
-          </Route> 
-
-          </Route>  
+          </Route>
         </Route>
-       <Route path="*" element={<Unable />} />
+      </Route>
+      <Route path="*" element={<Unable />} />
      </Routes>
      
      </BrowserRouter>
