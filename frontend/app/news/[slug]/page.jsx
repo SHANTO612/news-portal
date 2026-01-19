@@ -44,7 +44,7 @@ const Details = async ({ params }) => {
         <span className='font-bold'>{news?.date}</span>
         <span className='font-bold'>By {news?.writerName}</span>
         </div>
-    <>{HtmlParser(news?.description)}</>
+    <>{parse(news?.description || '')}</>
 
     </div>
 
