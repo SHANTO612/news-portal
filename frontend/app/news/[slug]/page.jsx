@@ -1,9 +1,9 @@
-import Breadcrumb from '@/components/Breadcrumb';
+import Breadcrumb from '@/components/BreadCrumb';
 import Category from '@/components/Category';
 import SimpleDetailsNewCard from '@/components/news/item/SimpleDetailsNewCard'; 
 import RecentNews from '@/components/news/RecentNews';
 import Search from '@/components/news/Search';
-import HtmlParser from 'react-html-parser';
+import parse from 'html-react-parser';
 import { base_api_url } from '@/config/config';
 import React from 'react';
 import RelatedNews from '@/components/news/RelatedNews';
