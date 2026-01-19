@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 const db_connect = async () => {
     try {
-        if (process.env.mode === 'production') {
+        if (mongoose.connection.readyState >= 1) {
+            return;
+        }
+        
+        if (process.env.mode === 'production' || process.env.NODE_ENV === 'production') {
             await mongoose.connect(process.env.db_production_url)
             console.log('Production database connect')
         } else {

@@ -8,6 +8,7 @@ const db_connect = require('./utils/db')
 dotenv.config()
 
 app.use(body_parser.json())
+app.use(body_parser.urlencoded({ extended: true })) // Add this for form data
 
 if (process.env.mode === 'production' || process.env.NODE_ENV === 'production') {
     app.use(cors({
