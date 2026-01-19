@@ -4,13 +4,19 @@ import React from 'react';
 
 const Category = async ({titleStyle}) => {
 
-    const res = await fetch(`${base_api_url}/api/category/all`,{
-        next: {
-            revalidate: 5
-        }
-    })
-   
-    const {categories } = await res.json() 
+    let categories = []
+    try {
+        const res = await fetch(`${base_api_url}/api/category/all`,{
+            next: {
+                revalidate: 5
+            }
+        })
+       
+        const data = await res.json() 
+        categories = data.categories
+    } catch (error) {
+        console.log("Category Fetch Error:", error)
+    } 
 
 
 

@@ -5,13 +5,19 @@ import { base_api_url } from '@/config/config';
 
 const PopularNews = async ({type}) => {
 
-    const res = await fetch(`${base_api_url}/api/popular/news`,{
-        next: {
-            revalidate: 1
-        }
-    })
-   
-    const {popularNews} = await res.json()
+    let popularNews = []
+    try {
+        const res = await fetch(`${base_api_url}/api/popular/news`,{
+            next: {
+                revalidate: 1
+            }
+        })
+       
+        const data = await res.json()
+        popularNews = data.popularNews
+    } catch (error) {
+        console.log("PopularNews Fetch Error:", error)
+    }
 
     return (
         <div className='w-full pb-8 mt-5'>

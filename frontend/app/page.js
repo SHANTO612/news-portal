@@ -13,14 +13,26 @@ import Image from "next/image";
 
 const Home = async () => {
 
-  const news_data = await fetch(`${base_api_url}/api/all/news`, {
-    next: {
-      revalidate: 5,
-    }
-  });
-
-  let news = await news_data?.json()
-  news = news.news 
+  let news = {
+      "Technology": [],
+      "Sports": [],
+      "Health": [],
+      "Education": [],
+      "Business": [],
+      "Travel": [],
+      "International": []
+  }
+  try {
+      const news_data = await fetch(`${base_api_url}/api/all/news`, {
+        next: {
+          revalidate: 5,
+        }
+      });
+      const data = await news_data.json()
+      news = data.news
+  } catch (e) {
+      console.log("Home Fetch Error:", e)
+  } 
 
   return (
     <div>

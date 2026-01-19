@@ -10,13 +10,18 @@ import React from 'react';
 const CategoryNews = async ({params}) => {
 
     const { category } = params; 
-    const res = await fetch(`${base_api_url}/api/category/news/${category}`,{
-        next: {
-            revalidate: 1
-        }
-    })
-   
-    const {news} = await res.json()
+    let news = []
+    try {
+        const res = await fetch(`${base_api_url}/api/category/news/${category}`,{
+            next: {
+                revalidate: 1
+            }
+        })
+        const data = await res.json()
+        news = data.news
+    } catch (error) {
+        console.log("Category Page Fetch Error:", error)
+    }
 
 
     return (

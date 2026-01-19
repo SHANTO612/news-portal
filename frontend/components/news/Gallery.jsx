@@ -4,13 +4,19 @@ import React from 'react';
 
 const Gallery = async () => {
 
-    const res = await fetch(`${base_api_url}/api/images/news`,{
-        next: {
-            revalidate: 5
-        }
-    })
-   
-    const { images } = await res.json() 
+    let images = []
+    try {
+        const res = await fetch(`${base_api_url}/api/images/news`,{
+            next: {
+                revalidate: 5
+            }
+        })
+       
+        const data = await res.json() 
+        images = data.images
+    } catch (error) {
+        console.log("Gallery Fetch Error:", error)
+    } 
 
     return (
         <div className='w-full flex flex-col gap-y-[14px]'>

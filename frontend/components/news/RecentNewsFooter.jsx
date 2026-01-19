@@ -5,13 +5,19 @@ import React from 'react';
 
 const RecentNewsFooter = async () => {
 
-    const res = await fetch(`${base_api_url}/api/recent/news`,{
-        next: {
-            revalidate: 1
-        }
-    })
-   
-    const {news} = await res.json() 
+    let news = []
+    try {
+        const res = await fetch(`${base_api_url}/api/recent/news`,{
+            next: {
+                revalidate: 1
+            }
+        })
+       
+        const data = await res.json() 
+        news = data.news
+    } catch (error) {
+        console.log("RecentNewsFooter Fetch Error:", error)
+    } 
 
 
     return (

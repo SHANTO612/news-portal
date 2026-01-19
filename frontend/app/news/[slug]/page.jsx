@@ -12,13 +12,21 @@ const Details = async ({ params }) => {
 
     const { slug } = params;
 
-    const res = await fetch(`${base_api_url}/api/news/details/${slug}`,{
-        next: {
-            revalidate: 1
-        }
-    })
-   
-    const {news, relatedNews} = await res.json()
+    let news = null;
+    let relatedNews = [];
+
+    try {
+        const res = await fetch(`${base_api_url}/api/news/details/${slug}`,{
+            next: {
+                revalidate: 1
+            }
+        })
+        const data = await res.json()
+        news = data.news
+        relatedNews = data.relatedNews
+    } catch (error) {
+        console.log("Details Page Fetch Error:", error)
+    }
 
     return (
 <div>
