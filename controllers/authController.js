@@ -1,4 +1,4 @@
-const authModel = require('../models/authModel')
+const authModel = require('../models/authmodel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {formidable} = require('formidable')

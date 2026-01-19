@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
 
-const authModel = require('../models/authModel');
+const authModel = require('../models/authmodel');
 
 async function run() {
   const mode = process.env.mode || process.env.MODE || 'development';

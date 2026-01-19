@@ -10,6 +10,12 @@ dotenv.config()
 app.use(body_parser.json())
 app.use(body_parser.urlencoded({ extended: true })) // Add this for form data
 
+// Middleware to ensure DB connection on every request (for Serverless)
+app.use(async (req, res, next) => {
+    await db_connect();
+    next();
+});
+
 if (process.env.mode === 'production' || process.env.NODE_ENV === 'production') {
     app.use(cors({
         origin: [

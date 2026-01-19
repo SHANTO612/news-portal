@@ -1,7 +1,7 @@
 const {formidable} = require('formidable')
 const cloudinary = require('cloudinary').v2
-const newsModel = require('../models/newsModel')
-const authModel = require('../models/authModel')
+const newsModel = require('../models/newsmodel')
+const authModel = require('../models/authmodel')
 const galleryModel = require('../models/galleryModel')
 const mongoose = require('mongoose');
 const { mongo: { ObjectId } } = mongoose;
