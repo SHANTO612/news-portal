@@ -1,4 +1,4 @@
-import HeadLines from "@/components/HeadLines";
+import HeadLines from "@/components/Headlines";
 import DetailsNews from "@/components/news/DetailsNews";
 import DetailsNewsCol from "@/components/news/DetailsNewsCol";
 import DetailsNewsRow from "@/components/news/DetailsNewsRow";
