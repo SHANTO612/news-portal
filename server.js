@@ -33,6 +33,9 @@ app.use('/',require('./routes/authRoutes'))
 app.use('/',require('./routes/newsRoutes'))
 app.get('/', (req,res) => res.send("Hello Easy"))
 
-db_connect()
+if (require.main === module) {
+    db_connect()
+    app.listen(port,() => console.log(`Server is running on port ${port}`))
+}
 
-app.listen(port,() => console.log(`Server is running on port ${port}`))
+module.exports = app

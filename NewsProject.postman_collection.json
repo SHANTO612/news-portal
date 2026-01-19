@@ -1,0 +1,901 @@
+{
+	"info": {
+		"_postman_id": "b18a3a0c-6e2b-4567-8901-abcdef123456",
+		"name": "NewsProject API",
+		"description": "Complete API collection for NewsProject backend.\n\n## Setup\n1. Create an Environment named 'NewsProject Local'\n2. Add variable `base_url` = `http://localhost:5000`\n3. `admin_token` and `writer_token` will be auto-filled by Login requests.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"admin_token\", jsonData.token);",
+									"    var base64Url = jsonData.token.split('.')[1];",
+									"    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');",
+									"    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {",
+									"        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);",
+									"    }).join(''));",
+									"    var tokenData = JSON.parse(jsonPayload);",
+									"    pm.environment.set(\"admin_id\", tokenData.id);",
+									"    console.log(\"Admin token and ID saved\");",
+									"}",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"shantocse612@gmail.com\",\n    \"password\": \"shanto612\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Logs in as Admin and saves token to `admin_token` variable."
+					},
+					"response": []
+				},
+				{
+					"name": "Writer Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"writer_token\", jsonData.token);",
+									"    var base64Url = jsonData.token.split('.')[1];",
+									"    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');",
+									"    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {",
+									"        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);",
+									"    }).join(''));",
+									"    var tokenData = JSON.parse(jsonPayload);",
+									"    pm.environment.set(\"writer_id\", tokenData.id);",
+									"    console.log(\"Writer token and ID saved\");",
+									"}",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"nibir@gmail.com\",\n    \"password\": \"shanto612\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Logs in as Writer and saves token to `writer_token` variable."
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"shanto612\",\n    \"newPassword\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Management",
+			"item": [
+				{
+					"name": "Add Writer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.writer && jsonData.writer._id) {",
+									"    pm.environment.set(\"writer_id_created\", jsonData.writer._id);",
+									"    console.log(\"Created writer ID saved\");",
+									"}",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Writer\",\n    \"email\": \"new_writer@gmail.com\",\n    \"password\": \"123456\",\n    \"category\": \"Sports\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/writer/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"writer",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Writers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.writers && jsonData.writers.length > 0) {",
+									"    pm.environment.set(\"writer_id\", jsonData.writers[0]._id);",
+									"    console.log(\"Fetched writer ID saved\");",
+									"}",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/writers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"writers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Writer By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/writer/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"writer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{writer_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Writer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Writer Name\",\n    \"email\": \"updated@gmail.com\",\n    \"category\": \"Tech\",\n    \"role\": \"writer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/update/writer/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"update",
+								"writer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{writer_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Writer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/delete/writer/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"delete",
+								"writer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{writer_id_created}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/profile/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{admin_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile (With Image)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Admin Name",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "shantocse612@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "test_image.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/update-profile/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"update-profile",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{admin_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "News Management",
+			"item": [
+				{
+					"name": "Add News (With Image)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{writer_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Sample News Title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "<p>This is a description.</p>",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "test_image.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/news/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dashboard News",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.news && jsonData.news.length > 0) {",
+									"    pm.environment.set(\"news_id\", jsonData.news[0]._id);",
+									"    pm.environment.set(\"news_slug\", jsonData.news[0].slug);",
+									"    console.log(\"News ID and Slug saved\");",
+									"}",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get News By ID (Dashboard)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/:newsId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								":newsId"
+							],
+							"variable": [
+								{
+									"key": "newsId",
+									"value": "{{news_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update News",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Updated Title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Updated desc",
+									"type": "text"
+								},
+								{
+									"key": "old_image",
+									"value": "{{news_image}}",
+									"type": "text"
+								},
+								{
+									"key": "new_image",
+									"type": "file",
+									"src": "test_image.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/news/update/:news_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"update",
+								":news_id"
+							],
+							"variable": [
+								{
+									"key": "news_id",
+									"value": "{{news_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update News Status (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"active\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/news/status-update/:news_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"status-update",
+								":news_id"
+							],
+							"variable": [
+								{
+									"key": "news_id",
+									"value": "{{news_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete News",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/delete/:news_id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"delete",
+								":news_id"
+							],
+							"variable": [
+								{
+									"key": "news_id",
+									"value": "{{news_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Public API",
+			"item": [
+				{
+					"name": "Get All Active News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/all/news",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"all",
+								"news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/latest/news",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"latest",
+								"news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Popular News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/popular/news",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"popular",
+								"news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/category/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get News Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/details/:slug",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news",
+								"details",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "{{news_slug}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/search/news?value=Sports",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search",
+								"news"
+							],
+							"query": [
+								{
+									"key": "value",
+									"value": "Sports"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistics (Public)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news-statistics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"news-statistics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

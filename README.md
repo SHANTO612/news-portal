@@ -598,6 +598,87 @@ Defined in [galleryModel.js](file:///e:/NewsProject/models/galleryModel.js).
 
 ---
 
+## Testing
+
+This project uses **Jest** and **Supertest** for backend API testing.
+
+### Running Tests
+
+To run the automated test suite, execute the following command in the root directory:
+
+```bash
+npm test
+```
+
+This will:
+1. Set the environment to `test`.
+2. Connect to the database.
+3. Run all test files located in the `tests/` directory.
+
+### Current Backend Test Coverage
+
+All automated tests live in [tests/api.test.js](file:///e:/NewsProject/tests/api.test.js).
+
+The suite currently includes:
+
+- **Authentication & Authorization**
+  - Admin and writer login with valid credentials.
+  - Invalid login scenarios (wrong password, missing email, missing password).
+- **Admin Features**
+  - Create writer, prevent duplicate writer by email.
+  - Get writer by id, update writer, delete writer.
+  - List all writers.
+  - View global news statistics and dashboard news.
+  - Update news status.
+  - Fetch dashboard news details and edit-news details by id.
+- **Writer Features**
+  - View own news statistics.
+  - View own news list.
+  - Verify that admin cannot access writer-only statistics.
+- **Profile**
+  - Admin fetches own profile by id.
+  - Writer fetches own profile by id.
+- **Security & Middleware**
+  - Protected route without token returns 401.
+  - Protected route with invalid token returns 401.
+- **Public API Endpoints**
+  - Latest, popular, recent news.
+  - All news grouped by category, categories summary.
+  - Images feed for gallery sections.
+  - Search endpoint (missing query and valid query).
+  - News details by slug and category news by category.
+
+These tests exercise the real database and API, using:
+
+- Admin user: `admin@example.com` with password `shanto612`.
+- Writer user: `nibir@gmail.com` with password `shanto612`.
+
+Endpoints that rely on file uploads and external services (Cloudinary) such as:
+
+- `POST /api/news/add`
+- `POST /api/images/add`
+- `PUT /api/news/update/:news_id`
+- `DELETE /api/news/delete/:news_id`
+- `PUT /api/update-profile/:id`
+
+are not covered by automated tests yet, because they require multipart upload handling and external image storage. These flows are better tested manually or with additional mocking configuration.
+
+### Adding New Tests
+
+Create a new file in the `tests/` directory (e.g., `tests/news.test.js`). Use the following template:
+
+```javascript
+const request = require('supertest');
+const app = require('../server');
+
+describe('My New Feature', () => {
+    it('should work correctly', async () => {
+        const res = await request(app).get('/api/my-endpoint');
+        expect(res.statusCode).toBe(200);
+    });
+});
+```
+
 ## Environment Configuration
 
 Root `.env` (not committed) should define at least:

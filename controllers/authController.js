@@ -33,11 +33,11 @@ class authController {
                     })
                     return res.status(200).json({message: 'Login Success',token})
                 } else {
-                    return res.status(404).json({ message: 'Invalid Password'})
+                    return res.status(401).json({ message: 'Invalid Credentials'})
                 }
                 
             } else {
-                return res.status(404).json({ message: 'User not Found'})
+                return res.status(401).json({ message: 'Invalid Credentials'})
             } 
 
         } catch (error) {

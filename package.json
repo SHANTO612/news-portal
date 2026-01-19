@@ -10,6 +10,8 @@
     "start": "node server.js",
     "build": "npm run build --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run frontend\"",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:api:postman": "newman run NewsProject.postman_collection.json -e NewsProject.postman_environment.json",
     "seed:admin": "node scripts/seedAdmin.js",
     "admin:sync": "node scripts/syncAdmin.js"
   },
@@ -31,6 +33,14 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
-    "nodemon": "^3.1.9"
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.2.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
