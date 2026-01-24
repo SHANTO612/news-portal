@@ -19,6 +19,27 @@ Below you’ll find:
 
 ---
 
+## Project Screenshots
+
+### Public Website
+![Client View 1](./readme_picture/Client%20View%201.png)
+![Client View 2](./readme_picture/Client%20View%202.png)
+
+### Admin Dashboard
+![Admin Dashboard](./readme_picture/admin%20dashboard.png)
+![Admin Profile](./readme_picture/admin%20profile.png)
+![Admin View News](./readme_picture/admin%20view%20news.png)
+![Admin Add Writer](./readme_picture/admin%20add%20writter.png)
+![Admin Writer View](./readme_picture/admin%20writer%20view.png)
+
+### Writer Dashboard
+![Writer Dashboard](./readme_picture/writer%20dashboard.png)
+![Writer Profile](./readme_picture/writer%20profile.png)
+![Writer Add News](./readme_picture/writer%20add%20news.png)
+![Writer News View](./readme_picture/writer%20news%20view.png)
+
+---
+
 ## User Types and What They Can Do
 
 ### 1. Admin
